@@ -3,10 +3,10 @@ import torch
 import torch.nn as nn
 
 # Defines the Mean Absolute Error loss
-class MSELoss(nn.Module):
+class MAELoss(nn.Module):
     def __init__(self):
         # Calls the constructor of the parent class
-        super(MSELoss, self).__init__()
+        super(MAELoss, self).__init__()
 
     # Defines the forward pass of the loss
     @staticmethod
@@ -23,7 +23,7 @@ class MSELoss(nn.Module):
         assert y_pred.shape == y_true.shape, "y_pred and y_true must have the same shape"
 
         # Calculates the absolute difference between the predicted and true values
-        loss = (y_pred - y_true).pow(2)
+        loss = (y_pred - y_true).abs()
 
         # Returns the mean of the loss
         return loss.mean()
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     y_true = torch.rand(4)
 
     # Calculates the mean absolute error
-    mse = MSELoss.forward(y_pred, y_true)
+    mae = MAELoss.forward(y_pred, y_true)
 
     # Prints the mean absolute error
-    print(f"Mean Squared Error: {mse.item():.4f}")
+    print(f"Mean Absolute Error: {mae.item():.4f}")
