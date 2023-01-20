@@ -2,8 +2,10 @@
 import torch
 import torch.nn as nn
 
-# Defines the Mean Absolute Error loss
 class MAELoss(nn.Module):
+    """
+    Mean Absolute Error Loss
+    """
     def __init__(self):
         # Calls the constructor of the parent class
         super(MAELoss, self).__init__()
