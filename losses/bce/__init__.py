@@ -2,13 +2,13 @@
 import torch
 import torch.nn as nn
 
-class MAELoss(nn.Module):
+class BCELoss(nn.Module):
     """
-    Mean Absolute Error Loss
+    Binary Cross Entropy Loss
     """
     def __init__(self):
         # Calls the constructor of the parent class
-        super(MAELoss, self).__init__()
+        super(BCELoss, self).__init__()
 
     # Defines the forward pass of the loss
     @staticmethod
@@ -24,8 +24,11 @@ class MAELoss(nn.Module):
         # Checks if the input tensors have the same shape
         assert y_pred.shape == y_true.shape, "y_pred and y_true must have the same shape"
 
-        # Calculates the absolute difference between the predicted and true values
-        loss = (y_pred - y_true).abs()
+        # Regulates the predicted values to be between 1E-7 and 1-1E-7
+        y_pred = torch.clamp(y_pred, 1E-7, 1-1E-7)
+
+        # Calculates the binary cross entropy loss
+        loss = -(y_true * torch.log(y_pred) + (1 - y_true) * torch.log(1 - y_pred))
 
         # Returns the mean of the loss
         return loss.mean()
@@ -36,7 +39,7 @@ if __name__ == "__main__":
     y_true = torch.rand(4)
 
     # Calculates the mean absolute error
-    mae = MAELoss.forward(y_pred, y_true)
+    bce = BCELoss.forward(y_pred, y_true)
 
     # Prints the mean absolute error
-    print(f"Mean Absolute Error: {mae.item():.4f}")
+    print(f"Mean Absolute Error: {bce.item():.4f}")
